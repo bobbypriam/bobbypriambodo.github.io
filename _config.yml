@@ -8,5 +8,7 @@ url: "http://bobbypriambodo.com" # the base hostname & protocol for your site
 twitter_username: bobbypriambodo
 github_username:  bobbypriambodo
 
+permalink: /:categories/:title
+
 # Build settings
 markdown: kramdown
