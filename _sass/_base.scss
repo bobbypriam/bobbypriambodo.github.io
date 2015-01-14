@@ -23,6 +23,10 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
+p {
+    text-align: justify;
+}
+
 
 
 /**
@@ -80,7 +84,9 @@ li {
  * Headings
  */
 h1, h2, h3, h4, h5, h6 {
+    font-family: "Caviar Dreams";
     font-weight: 300;
+    color: $brand-color;
 }
 
 
@@ -91,15 +97,6 @@ h1, h2, h3, h4, h5, h6 {
 a {
     color: $brand-color;
     text-decoration: none;
-
-    &:visited {
-        color: darken($brand-color, 15%);
-    }
-
-    &:hover {
-        color: $text-color;
-        text-decoration: underline;
-    }
 }
 
 
@@ -130,7 +127,7 @@ code {
     font-size: 15px;
     border: 1px solid $grey-color-light;
     border-radius: 3px;
-    background-color: #eef;
+    background-color: lighten($brand-color, 58%);
 }
 
 code {
@@ -139,7 +136,7 @@ code {
 
 pre {
     padding: 8px 12px;
-    overflow-x: scroll;
+    overflow-x: auto;
 
     > code {
         border: 0;
