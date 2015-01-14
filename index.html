@@ -2,19 +2,18 @@
 layout: default
 ---
 
-<section>
-  <header>
-    <h1>Latest Posts</h1>
-  </header>
+<section class="post-list">
   
+  <header>
+    <h1>Bobby Priambodo's Blog</h1>
+  </header>
+
   {% for post in site.posts %}
   <article>
-    <time datetime="{{ post.date | date: "%Y-%m-%d" }}" pubdate>{{ post.date | date: "%b %d, %Y" }}</time>
-    <h2>
+    <h1>
       <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-    </h2>
+    </h1>
+    <time datetime="{{ post.date | date: "%Y-%m-%d" }}" pubdate>{{ post.date | date: "%b %d, %Y" }}</time>
   </article>
   {% endfor %}
-  
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 </section>
