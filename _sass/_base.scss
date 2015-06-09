@@ -17,10 +17,15 @@ body {
     font-family: $base-font-family;
     font-size: $base-font-size;
     line-height: $base-line-height;
-    font-weight: 300;
+    font-weight: 400;
     color: $text-color;
     background-color: $background-color;
     -webkit-text-size-adjust: 100%;
+
+    @include media-query($on-laptop) {
+        font-size: 16px;
+        line-height: 1.5;
+    }
 }
 
 p {
@@ -84,8 +89,8 @@ li {
  * Headings
  */
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Caviar Dreams";
-    font-weight: 300;
+    font-family: $base-font-family;
+    font-weight: 700;
     color: $brand-color;
 }
 
@@ -105,15 +110,19 @@ a {
  * Blockquotes
  */
 blockquote {
-    color: $grey-color;
+    color: lighten($grey-color,15%);
     border-left: 4px solid $grey-color-light;
     padding-left: $spacing-unit / 2;
-    font-size: 18px;
-    letter-spacing: -1px;
+    font-size: $base-font-size;
+    // letter-spacing: -1px;
     font-style: italic;
 
     > :last-child {
         margin-bottom: 0;
+    }
+
+    @include media-query($on-laptop) {
+        font-size: 16px;
     }
 }
 
@@ -128,6 +137,10 @@ code {
     border: 1px solid $grey-color-light;
     border-radius: 3px;
     background-color: lighten($brand-color, 58%);
+
+    @include media-query($on-laptop) {
+        font-size: 13px;
+    }
 }
 
 code {

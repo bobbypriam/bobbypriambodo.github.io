@@ -7,14 +7,14 @@
 
 // Our variables
 $base-font-family: "Source Sans Pro", Arial, sans-serif;
-$base-font-size:   16px;
+$base-font-size:   20px;
 $small-font-size:  $base-font-size * 0.875;
-$base-line-height: 1.5;
+$base-line-height: 1.8;
 
-$spacing-unit:     30px;
+$spacing-unit:     40px;
 
-$text-color:       #111;
-$background-color: #fdfdfd;
+$text-color:       #888;
+$background-color: #fff;
 $brand-color:      #01c78c;//#2a7ae2;
 
 $grey-color:       #828282;
@@ -41,7 +41,6 @@ $on-laptop:        800px;
         @content;
     }
 }
-
 
 
 // Import partials from `sass_dir` (defaults to `_sass`)
