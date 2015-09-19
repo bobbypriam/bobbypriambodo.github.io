@@ -6,16 +6,17 @@
 
 
 // Our variables
-$base-font-family: "Source Sans Pro", Arial, sans-serif;
-$base-font-size:   20px;
+$base-font-family: 'Vollkorn', serif;
+$base-font-size:   22px;
+$header-font-family: 'Open Sans', sans-serif;
 $small-font-size:  $base-font-size * 0.875;
 $base-line-height: 1.8;
 
 $spacing-unit:     40px;
 
-$text-color:       #888;
+$text-color:       #555;
 $background-color: #fff;
-$brand-color:      #01c78c;//#2a7ae2;
+$brand-color:      #b71c1c;
 
 $grey-color:       #828282;
 $grey-color-light: lighten($grey-color, 40%);
