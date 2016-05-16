@@ -3,7 +3,7 @@ layout: default
 ---
 
 <section class="post-list">
-  
+
   <header>
     <h1>Bobby Priambodo's Blog</h1>
   </header>
@@ -14,6 +14,7 @@ layout: default
       <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
     </h1>
     <time datetime="{{ post.date | date: "%Y-%m-%d" }}" pubdate>{{ post.date | date: "%b %d, %Y" }}</time>
+    <p>{{ post.excerpt }}</p>
   </article>
   {% endfor %}
 </section>

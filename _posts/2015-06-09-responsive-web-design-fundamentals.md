@@ -29,10 +29,10 @@ Jadi. Siap? Mari kita mulai bagian serunya.
 Elemen penting pertama dari sebuah situs web yang responsif adalah deklarasi *meta tag* untuk *viewport*. (Saya asumsikan pembaca artikel ini memiliki pemahaman dasar tentang HTML dan CSS. Kalau merasa belum, [teman-teman di W3Schools](http://w3schools.com/) memiliki sumber belajar yang cukup lengkap.)
 
 Sebelum kita mulai membahas lebih jauh, mari kita lihat seperti apa *tag* yang dimaksud:
-    
-    {% highlight html %}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% endhighlight %}
+
+{% highlight html %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% endhighlight %}
 
 Jadi, apa yang spesial dari *tag* ini? Yah, *tag* ini ada pada template HTML di tutorial *Getting Started* *Bootstrap* dan *Foundation*, jadi pasti penting, kan? Bahkan dokumentasi *Foundation* secara spesifik menyebutkan: *"If you delete this meta tag World War Z will become a reality."*
 

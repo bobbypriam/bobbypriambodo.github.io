@@ -107,13 +107,19 @@
 }
 
 .post-list {
-    
+
     h1 {
         color: $text-color;
         font-size: 42px;
     }
+
+    header {
+      margin-bottom: 50px;
+    }
+
     article {
         border-top: 1px solid $grey-color-light;
+        padding-bottom: 30px;
 
         time {
             color: $grey-color;
@@ -121,13 +127,9 @@
         }
 
         h1 {
-            margin: 0 20px 0 0;
+            margin: 5px 20px 0 0;
             display: inline-block;
-            font-size: 20px;
-        }
-
-        &:last-child {
-            border-bottom: 1px solid $grey-color-light;
+            font-size: 26px;
         }
     }
 }
@@ -144,7 +146,7 @@
  */
  article {
     header {
-        margin-bottom: $spacing-unit;   
+        margin-bottom: $spacing-unit;
 
         h1 {
             font-size: 42px;
@@ -187,6 +189,10 @@
             @include media-query($on-laptop) {
                 font-size: 18px;
             }
+        }
+
+        &.content {
+          border-bottom: 1px solid $grey-color-light;
         }
     }
  }
