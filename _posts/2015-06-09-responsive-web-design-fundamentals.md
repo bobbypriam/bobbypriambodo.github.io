@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Responsive Web Design Fundamentals"
+title: "Responsive web design fundamentals"
 date: 2015-06-09 10:26:00
 ---
 
