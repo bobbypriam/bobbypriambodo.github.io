@@ -25,6 +25,9 @@ baseurl: ""
 # language attribute in <html> element.
 lang: en
 
+# Include google tracking code
+include-analytics: false
+
 # FROM THIS POINT ON EVERYTHING IS OPTIONAL
 
 ##############
