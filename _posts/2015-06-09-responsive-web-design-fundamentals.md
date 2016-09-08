@@ -2,6 +2,7 @@
 layout: post
 title: "Responsive web design fundamentals"
 date: 2015-06-09 10:26:00
+summary: Apa itu responsive design? Mengapa kita membutuhkan situs yang responsif? Bagaimana cara membuat situs kita responsif?
 ---
 
 Apa itu *responsive design*? *Buzzword* yang satu ini memang sudah tak asing lagi di telinga kita. Responsif sudah menjadi satu *requirement* yang wajib ada ketika kita ingin membuat website baru. Dan, membuat situs yang responsif memang tidak sulit, tapi jika kamu langsung berlari ke [*Bootstrap*](http://getbootstrap.com/), [*Foundation*](http://foundation.zurb.com/), atau *framework-framework* lainnya, sepertinya ada hal dasar penting yang kamu lewatkan.
