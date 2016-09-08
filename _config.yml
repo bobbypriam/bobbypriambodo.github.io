@@ -1,9 +1,8 @@
 # Site settings
 title: Bobby Priambodo
 email: bobbypriambodo@gmail.com
-description: >
-  Bobby Priambodo's personal blog.
-baseurl: "/blog" # the subpath of your site, e.g. /blog/
+description: Bobby Priambodo's personal blog.
+baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://bobbypriambodo.com" # the base hostname & protocol for your site
 twitter_username: bobbypriambodo
 github_username:  bobbypriambodo
