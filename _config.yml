@@ -42,10 +42,10 @@ footer-text: You have reached the end.<br><a href="http://steinvc.github.io/holo
 logo-image: # /img/logo.png
 
 # Toolbar color for Chrome on Android.
-theme-color-attr: "#00f0ff"
+theme-color-attr: "#ffffff"
 
 # Color of Microsoft live Tile.
-ms-tile-color: "#00f0ff"
+ms-tile-color: "#ffffff"
 
 # Color used throughout the theme. Format: R, G, B.
 theme-color: 0, 240, 255 # Original: 0, 240, 255
