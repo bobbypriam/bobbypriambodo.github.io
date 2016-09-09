@@ -210,9 +210,9 @@ Pada dasarnya, API server bertindak sebagai *proxy* antara *client app* dengan d
 
 *Client app* dari SusunJadwal adalah sebuah aplikasi web berbentuk *single-page app* (SPA) yang memanfaatkan framework AngularJS v1. *To be honest*, sekarang saya tidak menyukai Angular, tapi pembahasan itu butuh sebuah post tersendiri.
 
-Tugas dari komponen ini salah satunya adalah berkomunikasi dengan API server untuk pengambilan data-data serta penyimpanan jadwal  menggunakan modul `$http` dari Angular. *Nothing fancy in that*.
+Tugas dari komponen ini salah satunya adalah berkomunikasi dengan API server untuk pengambilan data-data serta penyimpanan jadwal  menggunakan modul `$http` dari Angular. *Nothing fancy in that*. Fitur gabung jadwal juga sebenarnya tidak sulit diimplementasi; pada dasarnya fitur tersebut hanya melakukan overlay jadwal-jadwal yang dimasukkan.
 
-Fitur yang lebih menarik dari *client app* SusunJadwal adalah penentuan apakah sebuah daftar jadwal memiliki bentrok atau tidak. Yang membuat ini menarik adalah proses pengecekan apabila ada dua buah jadwal, `current` dan `opponent`, bagaimana kita tahu bahwa jadwal tersebut overlap. Untuk tiap jadwal, kita memiliki waktu mulai dan waktu selesai. Jadi kita memiliki empat variabel waktu, yaitu `currentStart`, `currentEnd`, `opponentStart`, `opponentEnd`.
+Fitur yang bagi saya pribadi lebih menarik dari *client app* SusunJadwal adalah penentuan apakah sebuah daftar jadwal memiliki bentrok atau tidak. Yang membuat ini menarik adalah proses pengecekan apabila ada dua buah jadwal, `current` dan `opponent`, bagaimana kita tahu bahwa jadwal tersebut overlap. Untuk tiap jadwal, kita memiliki waktu mulai dan waktu selesai. Jadi kita memiliki empat variabel waktu, yaitu `currentStart`, `currentEnd`, `opponentStart`, `opponentEnd`.
 
 *I felt ashamed to admit that I've spent too much time searching for an algorithm to this particular problem*. Saya telah memanipulasi pengecekan kondisi keempat variabel tersebut namun entah kenapa selalu ada case yang tidak berhasil ditemukan konflik. Saya tidak ingat case-nya apa, namun saya ingat sempat kesal karena masalah yang terlihat mudah ini cukup menyulitkan. Solusi yang saya berikan meliputi beberapa tahap kasus pengecekan. Saya hampir menyerah.
 
@@ -230,9 +230,9 @@ if (opponentEnd >= currentStart && opponentStart <= currentEnd) {
 }
 ```
 
-*WTF! What have I done with my time?* Terlebih lagi, solusi ini sangat *counter-intuitive* dan membuat kita sulit percaya bahwa kondisi tersebut sudah mencakup keseluruhan kasus konflik yang terjadi.
+*WTF! What have I done with my time?* Terlebih lagi, solusi ini sangat *counter-intuitive* dan membuat kita sulit percaya bahwa kondisi tersebut sudah mencakup keseluruhan kasus konflik yang terjadi. Tapi itu benar, dan ribuan pengguna SusunJadwal telah membuktikan kebenarannya.
 
-Ini adalah salah satu kasus di mana saya belajar bahwa sebuah masalah yang sulit dapat menjadi mudah dengan hanya mengubah perspektif kita.
+Ini adalah salah satu kasus di mana saya belajar bahwa: sebuah masalah yang sulit dapat menjadi mudah dengan hanya mengubah perspektif kita.
 
 Untuk menghargai *revelation* ini, saya menambahkan link ke StackOverflow tersebut pada kode yang melakukan pengecekan jadwal ini. Berikut adalah kode terfenomenal yang pernah saya tulis:
 
@@ -276,7 +276,7 @@ function checkConflict() {
 }
 ```
 
-(*Yikes*. Saya tidak sempat menganalisis apakah *nested loop* tersebut bisa dioptimisasi atau tidak, tapi untungnya *so far* tidak ada keluhan performance ketika pengecekan konflik.)
+(*Yikes*. Saya tidak sempat menganalisis apakah *nested loop* tersebut bisa dioptimisasi atau tidak, tapi untungnya *so far* tidak ada keluhan performance ketika pengecekan konflik. *Sometimes you just have to leave things be*.)
 
 ## What's next?
 
