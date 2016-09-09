@@ -92,11 +92,13 @@ Dengan pertimbangan tersebut, kami mendefinisikan tiga buah komponen dari aplika
 3. *Client* kemudian melakukan *request* ke API Server untuk meminta jadwal jurusan yang bersangkutan.
 4. API Server membaca file hasil *scraping* dan mengembalikan jadwal untuk jurusan yang dimaksud.
 5. *Client* menampilkan jadwal yang diperoleh pada *browser*.
-6. Operasi-operasi selanjutnya (pemilihan dan *generate* jadwal) dilakukan sepenuhnya pada *client app* dan tidak memberatkan baik API server dan server SIAK-NG.
+6. Operasi-operasi selanjutnya (pemilihan, pengecekan konflik, dan *generate* jadwal) dilakukan sepenuhnya pada *client app* dan tidak memberatkan baik API server dan server SIAK-NG selain ketika menyimpan jadwal.
 
 Lebih jelas, *information flow* ini digambarkan pada diagram berikut.
 
-/gambar/
+![Diagram Arsitektur SusunJadwal]({{ site.baseurl }}/img/posts/susunjadwal-architecture-diagram.png) <small>Diagram Arsitektur SusunJadwal</small>
+
+Panah berbeda warna biru dan merah menunjukkan bahwa kedua operasi tersebut saling independen. Nomor pada panah menunjukkan alur informasi yang terjadi.
 
 Kita telah memiliki arsitektur yang dibutuhkan! Sekarang saatnya melakukan *breakdown* tiap komponen.
 
