@@ -108,24 +108,90 @@ SusunJadwal versi sebelumnya dikembangkan dengan bahasa pemrograman PHP. Karena 
 
 (*Yes, some might argue that Javascript isn't that much better from PHP. But we're still exploring things, so...*)
 
-Di bagian ini akan dibahas mengenai tiap-tiap komponen dari SusunJadwal, yaitu scraper, API server, dan *client app*. Untuk masing-masing komponen, akan dijelaskan mengenai teknologi yang digunakan dan bagaimana cara kerjanya.
+Di bagian ini akan dibahas mengenai tiap-tiap komponen dari SusunJadwal, yaitu *scraper*, API server, dan *client app*. Untuk masing-masing komponen, akan dijelaskan mengenai teknologi yang digunakan dan bagaimana cara kerjanya.
 
 ### Scraper
 
-**Technologies used**
+Komponen *scraper* dibuat menggunakan beberapa library Node.js sebagai berikut:
 
-- request
-- async
-- cheerio
+- **request** ([github](https://github.com/request/request), [npm](https://www.npmjs.com/package/request))
+  Sebuah library untuk mempermudah pembuatan HTTP *request*. Ada beberapa library lain sebagai alternatif dari request, misalnya superagent.
+- **async** ([github](https://github.com/caolan/async), [npm](https://www.npmjs.com/package/async))
+  Library untuk memudahkan *control flow* ketika menggunakan fungsi-fungsi *asynchronous* pada JavaScript (kami belum mengenal Promise waktu itu).
+- **cheerio** ([github](https://github.com/cheeriojs/cheerio), [npm](https://www.npmjs.com/package/cheerio))
+  Secara sederhana, JQuery (ugh) untuk server. Library ini digunakan untuk melakukan memudahkan parsing dokumen HTML.
 
-**How it works**
+Tugas dari *scraper* adalah untuk *scraping*. Satu tantangan dalam mengembangkan komponen ini adalah perlunya proses otentikasi menggunakan akun mahasiswa UI sebelum dapat mengakses halaman "Jadwal Kuliah". Yang membuat hal ini menantang adalah adanya dua langkah dalam otentikasi yang membuatnya tidak dapat di-solve secara *straightforward*.
 
-- authentication
-  - authenticate
-  - changeRole
-- jadwal scraping and parsing
-  - cheerio
-  - saving to JSON
+Kalau kita mencoba login melalui browser, jika diperhatikan baik-baik, URL akan berubah dari `/Authentication/Index` ke `/Welcome`. Namun sebenarnya, ada sebuah URL tambahan yang dikunjungi sebelum berpindah ke `/Welcome`, yaitu `/Authentication/ChangeRole`. Hal ini dapat dilihat jika kita melakukan request otentikasi menggunakan perkakas *command-line* seperti curl.
+
+Berikut adalah potongan kode yang digunakan untuk melakukan otentikasi (*full with nasty callbacks*):
+
+```javascript
+var credentialsIlkom = { 'u': process.env.SIAK_ILKOM_USERNAME, 'p': process.env.SIAK_ILKOM_PASSWORD };
+var credentialsSI = { 'u': process.env.SIAK_SI_USERNAME, 'p': process.env.SIAK_SI_PASSWORD };
+
+function auth(credentials, callback) {
+  authenticate();
+
+  function authenticate() {
+    request.post({
+      url: constants.AUTH_URL,
+      formData: credentials
+    }, function (err, response, body) {
+      if (err) return console.error('Error!');
+
+      changeRole();
+    });
+  }
+
+  function changeRole() {
+    request.get({
+      url: constants.CHANGEROLE_URL
+    }, function (err, response, body) {
+      if (err) return console.error('Error!');
+
+      callback();
+    });
+  }
+}
+```
+
+Pada saat pemanggilan `callback()`, kita sudah berada pada kondisi terotentikasi, sehingga kita bisa mulai mengakses halaman-halaman lain.
+
+Setelah terotentikasi, langkah selanjutnya adalah mengakses jadwal. Untuk jadwal kuliah jurusan Ilmu Komputer dan Sistem Informasi, kami menggunakan akun kami masing-masing, sehingga bisa langsung dilakukan dengan mengakses halaman "Jadwal Kuliah". Sementara untuk jadwal kuliah jurusan lain, kita harus melalui halaman "Jadwal Kuliah Keseluruhan" dengan beberapa parameter tambahan.
+
+```JavaScript
+function getJadwal(period, callback) {
+  request.get({
+    url: constants.JADWAL_URL + '?period=' + period
+  }, function (err, response, body) {
+    if (err) return callback(err);
+    callback(null, body);
+  });
+}
+
+function getJadwalLain(organization, period, callback) {
+  // Faculty is last five characters of organization.
+  var faculty = organization.substr(organization.length - 5);
+  request.get({
+    url: constants.JADWAL_SELURUH_URL + '?fac=' + faculty + '&org=' + organization + '&per=' + period
+  }, function (err, response, body) {
+    if (err) return callback(err);
+    callback(null, body);
+  });
+}
+```
+
+(*I realize now how silly it was to mix English and Indonesian in variable and function names. For the future me: Don't!*)
+
+Dua fungsi di atas digunakan untuk mengambil jadwal. Fungsi `getJadwal()` digunakan untuk mengakses halaman jadwal untuk Ilkom dan SI, sementara `getJadwalLain()` menerima parameter tambahan `organization` yaitu kode organisasi sebuah jurusan di UI. Sebagai contoh, jurusan Pendidikan Dokter memiliki kode organisasi **04.00.01.01**.
+
+Fungsi ini kemudian akan digunakan untuk pengambilan data jadwal. Kami menggunakan library *async* agar pengambilan jadwal untuk tiap-tiap jurusan dapat dilakukan secara paralel, sehingga lebih efisien.
+
+Jadwal diambil dalam format HTML. Agar pemrosesan dapat dilakukan lebih mudah, dilakukan *parsing* HTML menjadi sebuah JavaScript *object* dengan bantuan library *cheerio*. Hal ini dipersulit dengan penggunaan struktur tabel pada halaman tersebut di SIAK-NG yang tidak konvensional.
+
+Hasil konversi kemudian ditulis ke dalam sebuah file dalam format JSON untuk kemudian digunakan oleh API server. Proses ini dilakukan secara berkala, satu jam sekali, dengan bantuan perkakas *cron*.
 
 ### API server
 
