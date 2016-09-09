@@ -195,30 +195,88 @@ Hasil konversi kemudian ditulis ke dalam sebuah file dalam format JSON untuk kem
 
 ### API server
 
-**Technologies used**
+Library Node.js yang digunakan untuk API server:
 
-- express
-- mongoDB
-- mongoose
+- **express** ([github](https://github.com/expressjs/express), [npm](https://npmjs.org/package/express))
+  Sebuah web framework yang dapat digunakan untuk *spin up* sebuah API server secara cepat.
+- **mongoose** ([github](https://github.com/Automattic/mongoose), [npm](https://www.npmjs.com/package/mongoose))
+  *Kind of like* ORM untuk mongoDB. Ya, kami menggunakan mongoDB untuk database SusunJadwal.
 
-**How it works**
+Kerja API server pada aplikasi SusunJadwal cukup sederhana. Hanya terdapat tiga buah *endpoint* GET yang digunakan, yaitu `/jadwal/jurusan/:jurusan` untuk mengambil data jadwal berdasarkan `jurusan`, `/jadwal/shortlink/:shortlink` untuk mengambil jadwal yang sudah pernah tersimpan menggunakan shortlink-nya, dan `/jadwal/gabung` yang menerima *query parameter* `shortlinks` berisi shortlink-shortlink dari jadwal yang ingin digabungkan, serta sebuah *endpoint* POST pada `/jadwal` untuk menyimpan jadwal dan mendapatkan shortlink.
 
-- reading jadwal from JSON file
-- saving jadwal
+Pada dasarnya, API server bertindak sebagai *proxy* antara *client app* dengan database jadwal dan file hasil *scraping*. Kerjaan berat dari SusunJadwal sendiri ada pada dua komponen lainnya.
 
 ### Client app
 
-**Technologies used**
+*Client app* dari SusunJadwal adalah sebuah aplikasi web berbentuk *single-page app* (SPA) yang memanfaatkan framework AngularJS v1. *To be honest*, sekarang saya tidak menyukai Angular, tapi pembahasan itu butuh sebuah post tersendiri.
 
-- angular
-- sass
+Tugas dari komponen ini salah satunya adalah berkomunikasi dengan API server untuk pengambilan data-data serta penyimpanan jadwal  menggunakan modul `$http` dari Angular. *Nothing fancy in that*.
 
-**How it works**
+Fitur yang lebih menarik dari *client app* SusunJadwal adalah penentuan apakah sebuah daftar jadwal memiliki bentrok atau tidak. Yang membuat ini menarik adalah proses pengecekan apabila ada dua buah jadwal, `current` dan `opponent`, bagaimana kita tahu bahwa jadwal tersebut overlap. Untuk tiap jadwal, kita memiliki waktu mulai dan waktu selesai. Jadi kita memiliki empat variabel waktu, yaitu `currentStart`, `currentEnd`, `opponentStart`, `opponentEnd`.
 
-- fetching from API
-- conflict checking
-- schedule drawing
-- joining jadwal
+*I felt ashamed to admit that I've spent too much time searching for an algorithm to this particular problem*. Saya telah memanipulasi pengecekan kondisi keempat variabel tersebut namun entah kenapa selalu ada case yang tidak berhasil ditemukan konflik. Saya tidak ingat case-nya apa, namun saya ingat sempat kesal karena masalah yang terlihat mudah ini cukup menyulitkan. Solusi yang saya berikan meliputi beberapa tahap kasus pengecekan. Saya hampir menyerah.
+
+Sampai saya [menemukan jawabannya di StackOverflow](http://stackoverflow.com/questions/143552/comparing-date-ranges/143568#143568). Menurut saya, jawaban tersebut merupakan salah satu jawaban paling elegan yang pernah saya baca di StackOverflow.
+
+(Serius. Jika Anda, pembaca, punya waktu, silakan baca jawaban tersebut sebentar. Kemudian kembali lagi ke sini.)
+
+Singkat cerita, kesulitan yang saya alami diakibatkan oleh *approach* saya yang tidak tepat; saya terlalu terfokus ke kasus-kasus apa saja yang menimbulkan konflik, sementara problem ini akan lebih mudah dipecahkan juga kita fokus pada kasus-kasus apa yang **tidak** menimbulkan konflik.
+
+*And it boils down to this simple conditional*:
+
+```javascript
+if (opponentEnd >= currentStart && opponentStart <= currentEnd) {
+  conflict = true;
+}
+```
+
+*WTF! What have I done with my time?* Terlebih lagi, solusi ini sangat *counter-intuitive* dan membuat kita sulit percaya bahwa kondisi tersebut sudah mencakup keseluruhan kasus konflik yang terjadi.
+
+Ini adalah salah satu kasus di mana saya belajar bahwa sebuah masalah yang sulit dapat menjadi mudah dengan hanya mengubah perspektif kita.
+
+Untuk menghargai *revelation* ini, saya menambahkan link ke StackOverflow tersebut pada kode yang melakukan pengecekan jadwal ini. Berikut adalah kode terfenomenal yang pernah saya tulis:
+
+```javascript
+function checkConflict() {
+  var kelasArray = [];
+  vm.conflict = false;
+
+  forEachObject(vm.selectedKelas, function (kelas) {
+    kelas.conflict = false;
+    kelasArray.push(kelas);
+  });
+
+  // Four nasty nested loops, I know...
+  // But since the selected class can be assumed to be
+  // no more than 20, I guess this is still safe.
+  while (kelasArray.length > 0) {
+    var current = kelasArray.pop();
+    for (var i = 0; i < kelasArray.length; i++) {
+      var opponent = kelasArray[i];
+      for (var j = 0; j < current.jadwal.length; j++) {
+        for (var k = 0; k < opponent.jadwal.length; k++) {
+          if (current.jadwal[j].hari == opponent.jadwal[k].hari) {
+            var currentStart = convertHourStringToMinutes(current.jadwal[j].jamMulai);
+            var currentEnd = convertHourStringToMinutes(current.jadwal[j].jamSelesai);
+            var opponentStart = convertHourStringToMinutes(opponent.jadwal[k].jamMulai);
+            var opponentEnd = convertHourStringToMinutes(opponent.jadwal[k].jamSelesai);
+
+            // Conflict comparison for interval is this simple.
+            // Credit: http://stackoverflow.com/questions/143552/comparing-date-ranges/143568#143568
+            if (opponentEnd >= currentStart && opponentStart <= currentEnd) {
+              current.conflict = true;
+              opponent.conflict = true;
+              vm.conflict = true;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+(*Yikes*. Saya tidak sempat menganalisis apakah *nested loop* tersebut bisa dioptimisasi atau tidak, tapi untungnya *so far* tidak ada keluhan performance ketika pengecekan konflik.)
 
 ## What's next?
 
