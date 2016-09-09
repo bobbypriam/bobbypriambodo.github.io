@@ -163,7 +163,7 @@ Pada saat pemanggilan `callback()`, kita sudah berada pada kondisi terotentikasi
 
 Setelah terotentikasi, langkah selanjutnya adalah mengakses jadwal. Untuk jadwal kuliah jurusan Ilmu Komputer dan Sistem Informasi, kami menggunakan akun kami masing-masing, sehingga bisa langsung dilakukan dengan mengakses halaman "Jadwal Kuliah". Sementara untuk jadwal kuliah jurusan lain, kita harus melalui halaman "Jadwal Kuliah Keseluruhan" dengan beberapa parameter tambahan.
 
-```JavaScript
+```javascript
 function getJadwal(period, callback) {
   request.get({
     url: constants.JADWAL_URL + '?period=' + period
