@@ -19,7 +19,7 @@ Ada beberapa faktor yang memengaruhi pemilihan ini, seperti misalnya kemungkinan
 
 Demi membantu penyusunan jadwal kuliah, ada sebuah menu pada SIAK-NG bernama "Jadwal Kuliah" yang memuat daftar-daftar kelas yang dibuka pada semester tersebut. Daftar akan terus bertambah seiring mendekatnya waktu pengisian IRS, sehingga mahasiswa perlu memeriksa halaman tersebut berkali-kali untuk melihat jadwal kelas baru. Berikut adalah gambar contoh daftar kelas yang ada pada halaman tersebut.
 
-/gambar/
+![Jadwal Kuliah]({{ site.baseurl }}/img/posts/jadwal-kuliah.jpg) <small>Screenshot halaman Jadwal Kuliah</small>
 
 Ya, daftar disajikan dalam bentuk... daftar. Alhasil, sulit bagi mahasiswa untuk mendapatkan informasi apakah mata kuliah yang dipilih memiliki jadwal bentrok atau tidak.
 
