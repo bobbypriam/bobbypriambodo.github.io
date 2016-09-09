@@ -140,7 +140,7 @@ highlighter: rouge
 kramdown:
   input: GFM
 paginate_path: "/page-:num/"
-permalink: /:categories/:title
+permalink: /posts/:categories/:title
 defaults:
   -
     scope:
