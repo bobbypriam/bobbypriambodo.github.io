@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The engineering behind SusunJadwal"
-date: 2016-09-08 04:47:00
+date: 2016-09-10 04:47:00
 summary: Sejak beberapa tahun silam, SIAK war di Universitas Indonesia selalu didahului oleh peluncuran aplikasi SusunJadwal. Bagaimana aplikasi tersebut bekerja?
 ---
 
