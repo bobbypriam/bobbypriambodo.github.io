@@ -218,7 +218,7 @@ Tugas dari komponen ini salah satunya adalah berkomunikasi dengan API server unt
 
 Fitur yang bagi saya pribadi lebih menarik dari *client app* SusunJadwal adalah penentuan apakah sebuah daftar jadwal memiliki bentrok atau tidak. Yang membuat ini menarik adalah proses pengecekan apabila ada dua buah jadwal, `current` dan `opponent`, bagaimana kita tahu bahwa jadwal tersebut overlap. Untuk tiap jadwal, kita memiliki waktu mulai dan waktu selesai. Jadi kita memiliki empat variabel waktu, yaitu `currentStart`, `currentEnd`, `opponentStart`, `opponentEnd`.
 
-*I'ts hard to admit that I'd spent too much time searching for an algorithm to this particular problem*. Saya telah memanipulasi pengecekan kondisi keempat variabel tersebut namun entah kenapa selalu ada case yang tidak berhasil ditemukan konflik. Saya tidak ingat case-nya apa, namun saya ingat sempat kesal karena masalah yang terlihat mudah ini cukup menyulitkan. Solusi yang saya berikan meliputi beberapa tahap kasus pengecekan. Saya hampir menyerah.
+*It's hard to admit that I'd spent too much time searching for an algorithm to this particular problem*. Saya telah memanipulasi pengecekan kondisi keempat variabel tersebut namun entah kenapa selalu ada case yang tidak berhasil ditemukan konflik. Saya tidak ingat case-nya apa, namun saya ingat sempat kesal karena masalah yang terlihat mudah ini cukup menyulitkan. Solusi yang saya berikan meliputi beberapa tahap kasus pengecekan. Saya hampir menyerah.
 
 Sampai saya [menemukan jawabannya di StackOverflow](http://stackoverflow.com/questions/143552/comparing-date-ranges/143568#143568). Menurut saya, jawaban tersebut merupakan salah satu jawaban paling elegan yang pernah saya baca di SO.
 
