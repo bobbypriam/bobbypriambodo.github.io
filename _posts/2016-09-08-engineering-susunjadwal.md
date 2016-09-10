@@ -13,7 +13,7 @@ Isian Rencana Studi (IRS) adalah sebuah formulir yang berisi daftar kelas mata k
 
  Di UI, mahasiswa dibebaskan untuk memilih kelas yang ingin diambil pada suatu semester (kecuali pada beberapa Fakultas seperti Fakultas Kedokteran yang sudah memiliki paket tetap tiap semester).  Karena mahasiswa bebas memilih, terjadilah perebutan kelas-kelas favorit. Fenomena inilah yang disebut SIAK war.
 
- (Ditambah kebiasaan server SIAK-NG yang *down* ketika mengalami *overload*, yang akan kita bahas nanti di artikel ini.)
+ (*It's not pretty*. Apalagi ditambah kebiasaan server SIAK-NG yang *down* ketika mengalami *overload*, yang akan [kita bahas nanti di artikel ini](#on-siak-ngs-performance-and-scalability).)
 
 Ada beberapa faktor yang memengaruhi pemilihan ini, seperti misalnya kemungkinan jadwal kuliah yang bentrok <del>dan bagaimana mata kuliah dengan dosen yang \*uhuk\* baik \*uhuk\* memiliki banyak peminat dan memicu perselisihan batin</del>. Dengan waktu mahasiswa yang terbatas, jadwal kuliah harus diatur sedemikian rupa sehingga tidak bentrok dan masih menyisakan waktu untuk kegiatan lain, seperti misalnya berorganisasi atau main layangan.
 
@@ -21,7 +21,7 @@ Demi membantu penyusunan jadwal kuliah, ada sebuah menu pada SIAK-NG bernama "Ja
 
 ![Jadwal Kuliah]({{ site.baseurl }}/img/posts/jadwal-kuliah.jpg) <small>Screenshot halaman Jadwal Kuliah</small>
 
-Ya, daftar disajikan dalam bentuk... daftar. Alhasil, sulit bagi mahasiswa untuk mendapatkan informasi apakah mata kuliah yang dipilih memiliki jadwal bentrok atau tidak.
+Ya, daftar disajikan dalam bentuk... daftar. Alhasil, sulit bagi mahasiswa untuk mendapatkan informasi secara visual apakah mata kuliah yang dipilih memiliki jadwal bentrok atau tidak.
 
 Sebagai mahasiswa Fasilkom yang haus kontribusi, kawan-kawan dari [Pandago Studio](https://twitter.com/pandagostudio) yang lalu dilanjutkan oleh [Ristek](http://ristek.cs.ui.ac.id/) mengembangkan sebuah aplikasi bernama **SusunJadwal**.
 
@@ -31,7 +31,9 @@ Pada artikel ini, kita akan mencoba menelusur lebih dalam: bagaimana aplikasi Su
 
 *Disclaimer: Segala bahasan dari artikel ini mengacu pada versi SusunJadwal yang melibatkan saya langsung dalam pengembangannya, yaitu periode Ganjil dan Genap 2015/2016 oleh Ristek CSUI. Pengembangan sebelum dan sesudahnya mungkin memiliki detail yang berbeda.*
 
-SusunJadwal adalah sebuah aplikasi web yang dapat membantu mahasiswa UI menyusun rencana jadwal kuliah pra-pengisian IRS. Idenya cukup sederhana: berdasarkan informasi kelas pada halaman "Jadwal Kuliah", pengguna dapat secara interaktif memilih kelas-kelas yang ingin diambil, dan sistem akan secara otomatis memberikan notifikasi apabila ada jadwal kelas yang bentrok. Apabila jadwal sudah bersih dari bentrok, pengguna juga dapat meng-*generate* representasi visual jadwal agar rancangan jadwal dapat lebih mudah dimengerti. Sebagai gambaran, [SusunJadwal versi Ganjil 2016/2017 dapat diakses pada tautan ini](http://ristek.cs.ui.ac.id/susunjadwal/).
+SusunJadwal adalah sebuah aplikasi web yang dapat membantu mahasiswa UI menyusun rencana jadwal kuliah pra-pengisian IRS.
+
+Idenya cukup sederhana: berdasarkan informasi kelas pada halaman "Jadwal Kuliah", pengguna dapat secara interaktif memilih kelas-kelas yang ingin diambil, dan sistem akan secara otomatis memberikan notifikasi apabila ada jadwal kelas yang bentrok. Apabila jadwal sudah bersih dari bentrok, pengguna juga dapat meng-*generate* representasi visual jadwal agar rancangan jadwal dapat lebih mudah dimengerti. Sebagai gambaran, [SusunJadwal versi Ganjil 2016/2017 dapat diakses pada tautan ini](http://ristek.cs.ui.ac.id/susunjadwal/).
 
 Selain dua fitur utama tersebut, terdapat beberapa fitur tambahan, yaitu:
 
@@ -54,7 +56,7 @@ Sebelum masuk ke penetapan desain arsitektur, kita akan membahas mengenai kebutu
 
 Seperti yang telah disebut sebelumnya, kita hanya memiliki satu sumber informasi, yaitu halaman "Jadwal Kuliah" pada SIAK-NG. Sayangnya, sistem SIAK-NG tidak menyediakan sebuah [API](http://www.webopedia.com/TERM/A/API.html) yang memungkinkan kita secara mudah dapat mengonsumsi data darinya. Karena itu, kita akan menggunakan salah satu metode kuno untuk *data collection* pada web, yaitu [*scraping*](https://en.wikipedia.org/wiki/Web_scraping).
 
-Sayangnya, seperti yang sempat saya tulis di awal, server SIAK-NG memiliki kelemahan apabila diakses oleh ribuan orang bersama-sama pada suatu waktu. Let's talk about this for a bit.
+Yang cukup menyulitkan lagi, seperti yang sempat saya tulis di awal, server SIAK-NG memiliki kelemahan apabila diakses oleh ribuan orang bersama-sama pada suatu waktu. Let's talk about this for a bit.
 
 ### On SIAK-NG's Performance and Scalability
 
@@ -68,7 +70,7 @@ Berdasarkan sumber yang dapat dipercaya, tingkat *availability* sistem SIAK-NG s
 
 *But still*, ini tidak membenarkan; untuk apa sistem hidup ketika tidak dibutuhkan dan mati ketika dibutuhkan?
 
-Tentu saja, ini tidak berarti tim IT UI tidak mengusahakan performa yang lebih baik untuk SIAK-NG pada masa pengisian IRS. Sumber yang sama mengatakan server SIAK-NG sendiri sebenernya sudah di-*load balance* (dapat dilihat jika kita login, di atas nama kita di kiri atas ada indikator Node mana yang melayani *request* kita). Sayangnya, masih terdapat *bottleneck* pada I/O dari *database*. *Database* server hanya berjumlah satu, yang menyebabkan sistem *down* ketika *overload*.
+Tentu saja, ini tidak berarti tim IT UI tidak mengusahakan performa yang lebih baik untuk SIAK-NG pada masa pengisian IRS. Sumber yang sama mengatakan server SIAK-NG sendiri sebenernya sudah di-*load balance* (dapat dilihat jika kita login, di atas nama kita di kiri atas ada indikator Node mana yang melayani *request* kita). Sayangnya, masih terdapat *bottleneck* pada I/O dari *database*. *Database* server hanya ada satu, yang menyebabkan sistem *down* ketika *overload*.
 
 Setahu saya, ada wacana untuk terus menerapkan konsep sistem terdistribusi pada arsitektur SIAK-NG untuk meningkatkan responsivitasnya. Tapi sebelum itu terjadi, *we'll just have to live with it*.
 
@@ -210,17 +212,17 @@ Pada dasarnya, API server bertindak sebagai *proxy* antara *client app* dengan d
 
 ### Client app
 
-*Client app* dari SusunJadwal adalah sebuah aplikasi web berbentuk *single-page app* (SPA) yang memanfaatkan framework AngularJS v1. *To be honest*, sekarang saya tidak menyukai Angular, tapi pembahasan itu butuh sebuah post tersendiri.
+*Client app* dari SusunJadwal adalah sebuah aplikasi web berbentuk *single-page app* (SPA) yang memanfaatkan framework AngularJS v1. *To be honest*, sekarang saya tidak menyukai Angular, dengan alasan yang hampir sama dengan kebanyakan orang di luar sana. Tapi saya tidak akan membahasnya di artikel ini. (*By the way*, kalau Anda sedang ingin membuat *front-end* JS *app*, coba lihat [React](https://facebook.github.io/react/blog/2016/07/22/create-apps-with-no-configuration.html)+[Redux](http://redux.js.org/), *or better yet*, [Elm](http://elm-lang.org/).)
 
 Tugas dari komponen ini salah satunya adalah berkomunikasi dengan API server untuk pengambilan data-data serta penyimpanan jadwal  menggunakan modul `$http` dari Angular. *Nothing fancy in that*. Fitur gabung jadwal juga sebenarnya tidak sulit diimplementasi; pada dasarnya fitur tersebut hanya melakukan overlay jadwal-jadwal yang dimasukkan.
 
 Fitur yang bagi saya pribadi lebih menarik dari *client app* SusunJadwal adalah penentuan apakah sebuah daftar jadwal memiliki bentrok atau tidak. Yang membuat ini menarik adalah proses pengecekan apabila ada dua buah jadwal, `current` dan `opponent`, bagaimana kita tahu bahwa jadwal tersebut overlap. Untuk tiap jadwal, kita memiliki waktu mulai dan waktu selesai. Jadi kita memiliki empat variabel waktu, yaitu `currentStart`, `currentEnd`, `opponentStart`, `opponentEnd`.
 
-*I felt ashamed to admit that I've spent too much time searching for an algorithm to this particular problem*. Saya telah memanipulasi pengecekan kondisi keempat variabel tersebut namun entah kenapa selalu ada case yang tidak berhasil ditemukan konflik. Saya tidak ingat case-nya apa, namun saya ingat sempat kesal karena masalah yang terlihat mudah ini cukup menyulitkan. Solusi yang saya berikan meliputi beberapa tahap kasus pengecekan. Saya hampir menyerah.
+*I'ts hard to admit that I'd spent too much time searching for an algorithm to this particular problem*. Saya telah memanipulasi pengecekan kondisi keempat variabel tersebut namun entah kenapa selalu ada case yang tidak berhasil ditemukan konflik. Saya tidak ingat case-nya apa, namun saya ingat sempat kesal karena masalah yang terlihat mudah ini cukup menyulitkan. Solusi yang saya berikan meliputi beberapa tahap kasus pengecekan. Saya hampir menyerah.
 
-Sampai saya [menemukan jawabannya di StackOverflow](http://stackoverflow.com/questions/143552/comparing-date-ranges/143568#143568). Menurut saya, jawaban tersebut merupakan salah satu jawaban paling elegan yang pernah saya baca di StackOverflow.
+Sampai saya [menemukan jawabannya di StackOverflow](http://stackoverflow.com/questions/143552/comparing-date-ranges/143568#143568). Menurut saya, jawaban tersebut merupakan salah satu jawaban paling elegan yang pernah saya baca di SO.
 
-(Serius. Jika Anda, pembaca, punya waktu, silakan baca jawaban tersebut sebentar. Kemudian kembali lagi ke sini.)
+(Serius. Jika Anda, pembaca, punya waktu, silakan baca jawaban tersebut sebentar. Jangan lupa kembali lagi ke sini!)
 
 Singkat cerita, kesulitan yang saya alami diakibatkan oleh *approach* saya yang tidak tepat; saya terlalu terfokus ke kasus-kasus apa saja yang menimbulkan konflik, sementara problem ini akan lebih mudah dipecahkan juga kita fokus pada kasus-kasus apa yang **tidak** menimbulkan konflik.
 
@@ -232,9 +234,11 @@ if (opponentEnd >= currentStart && opponentStart <= currentEnd) {
 }
 ```
 
-*WTF! What have I done with my time?* Terlebih lagi, solusi ini sangat *counter-intuitive* dan membuat kita sulit percaya bahwa kondisi tersebut sudah mencakup keseluruhan kasus konflik yang terjadi. Tapi itu benar, dan ribuan pengguna SusunJadwal telah membuktikan kebenarannya.
+*WTF! What have I done with my time?*
 
-Ini adalah salah satu kasus di mana saya belajar bahwa: sebuah masalah yang sulit dapat menjadi mudah dengan hanya mengubah perspektif kita.
+Terlebih lagi, solusi ini sangat *counter-intuitive* dan membuat kita sulit percaya bahwa kondisi tersebut sudah mencakup keseluruhan kasus konflik yang terjadi. Tapi itu benar, dan ribuan pengguna SusunJadwal telah membuktikan kebenarannya.
+
+Ini adalah salah satu kasus di mana saya belajar bahwa sebuah masalah yang sulit dapat menjadi mudah dengan hanya mengubah perspektif kita.
 
 Untuk menghargai *revelation* ini, saya menambahkan link ke StackOverflow tersebut pada kode yang melakukan pengecekan jadwal ini. Berikut adalah kode terfenomenal yang pernah saya tulis:
 
@@ -282,6 +286,8 @@ function checkConflict() {
 
 ## What's next?
 
+Dengan selesainya pembahasan mengenai komponen, maka artikel ini sudah sampai akhir.
+
 SusunJadwal mungkin sangat *niche*, karena ia bekerja hanya dua kali setahun (masing-masing dalam periode empat hari) dan hanya menargetkan mahasiswa UI. Tapi membantu orang tidak berarti kita harus membuat sesuatu yang sebesar Facebook, Airbnb, dan Amazon. *We may start with something small*, tapi pastikan masalahnya memang ada (jangan mengada-ada masalah).
 
 Masih ada beberapa fitur dan pengembangan lebih lanjut dari SusunJadwal yang belum sempat direalisasikan, seperti misalnya fitur export gambar JPG/PNG dari jadwal yang sudah dibuat. If you have ideas, hubungi segera SIG Web Development [Ristek Fasilkom UI](https://twitter.com/ristekcsui)!
@@ -289,3 +295,5 @@ Masih ada beberapa fitur dan pengembangan lebih lanjut dari SusunJadwal yang bel
 Saya harap post ini dapat menjadi inspirasi baik dari segi ide maupun segi teknis jika pembaca ingin mengembangkan sesuatu.
 
 *Until next time*!
+
+<small>P.S. *The code I used in the article was written more than a year ago, back when I didn't give much thought about coding best practices. I cringed every time I copy-pasted them while writing this article. I've learned a lot since then, I promise!* :D</small>
